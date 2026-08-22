@@ -30,7 +30,7 @@
     "class": "Conceptual",
     "grain": "discourse",
     "min_repeats": 1,
-    "note": "dinilai relatif terhadap skala ekspektasi yang dibangun konteks sebelumnya",
+    "note": "judged relative to the expectation scale built by prior context",
     "operation": "deletion"
   },
   "id": 2,
@@ -48,5 +48,9 @@
     "contoh": "kushala",
     "geometri": "kushala",
     "lisensi": "MIT"
-  }
+  },
+  "example_languages": [
+    "en",
+    "id"
+  ]
 }

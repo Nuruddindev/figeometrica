@@ -40,7 +40,7 @@
     "grain": "word",
     "locus": "medial",
     "min_repeats": 1,
-    "note": "kompilasi heuristik: penambahan di tengah kata (epenthesis)",
+    "note": "heuristic compile: insertion in the middle of a word (epenthesis)",
     "operation": "addition",
     "template": []
   },

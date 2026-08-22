@@ -19,7 +19,7 @@
       [
         "We shall fight on the seas.",
         "We shall never surrender.",
-        "Atau mungkin menyerah saja kalau hujan."
+        "Or perhaps we surrender after all, if it rains."
       ],
       [
         "Kemenangan pasti milik kita!",
@@ -33,7 +33,7 @@
     "class": "Conceptual",
     "grain": "discourse",
     "min_repeats": 1,
-    "note": "meredam gaya retoris unit-unit sebelumnya",
+    "note": "dampens the rhetorical style of preceding units",
     "operation": "deletion"
   },
   "id": 1,

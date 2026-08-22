@@ -33,7 +33,7 @@
     "class": "Conceptual",
     "grain": "unit",
     "min_repeats": 1,
-    "note": "kalimat penutup yang meredam efek",
+    "note": "a closing sentence that dampens the effect",
     "operation": "deletion"
   },
   "id": 63,
@@ -51,5 +51,9 @@
     "contoh": "kushala",
     "geometri": "kushala",
     "lisensi": "MIT"
-  }
+  },
+  "example_languages": [
+    "en",
+    "id"
+  ]
 }

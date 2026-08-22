@@ -33,7 +33,7 @@
     "class": "Lexical",
     "grain": "grapheme",
     "min_repeats": 1,
-    "note": "unsur berturutan terjangkar pada posisi alfabet berurutan",
+    "note": "consecutive elements anchored to successive alphabetical positions",
     "operation": "ordering",
     "template": []
   },

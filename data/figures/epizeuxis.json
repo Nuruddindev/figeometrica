@@ -31,7 +31,7 @@
     "grain": "unit",
     "locus": "distributed",
     "min_repeats": 2,
-    "note": "kompilasi heuristik: kembalian berulang ke anchor argumen sama, materi selingan diizinkan (commoratio)",
+    "note": "heuristic compile: recurring return to the same argument anchor, interleaved material allowed (commoratio)",
     "operation": "repetition",
     "template": []
   },

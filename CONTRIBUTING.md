@@ -62,6 +62,17 @@ why. That's a feature, not a bug: *NO SILENT PROMOTION*.
 Write definitions in your own words. Text copied from copyrighted
 sources will not be accepted.
 
+### Language policy (CONTRACT §12.3)
+
+- `definition` and all `note` fields: **English only** — the theory layer
+  is monoglot so it can be judged anywhere.
+- Example text: **any language welcome** — figures are
+  language-independent patterns, so an Indonesian or Arabic instance is
+  evidence for the thesis, not noise. Entries with non-English examples
+  declare them: `"example_languages": ["en", "id"]`.
+- Never mix languages inside one example sequence — each sequence is one
+  discourse.
+
 ## Missing a vocabulary slot? Propose a knowledge version
 
 Never force an unrelated slot into place. Instead:

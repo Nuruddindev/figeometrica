@@ -47,7 +47,7 @@
     "grain": "word",
     "locus": "medial",
     "min_repeats": 1,
-    "note": "kompilasi heuristik: pemotongan segmen tengah kata (syncope)",
+    "note": "heuristic compile: cutting medial word segments (syncope)",
     "operation": "deletion",
     "template": []
   },

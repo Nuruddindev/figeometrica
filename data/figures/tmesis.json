@@ -34,7 +34,7 @@
     "class": "Lexical",
     "grain": "word",
     "min_repeats": 1,
-    "note": "sisip di tengah kata/frasa",
+    "note": "insertion in the middle of a word/phrase",
     "operation": "addition",
     "template": []
   },
@@ -53,5 +53,9 @@
     "contoh": "kushala",
     "geometri": "kushala",
     "lisensi": "MIT"
-  }
+  },
+  "example_languages": [
+    "en",
+    "id"
+  ]
 }

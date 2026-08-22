@@ -31,7 +31,7 @@
     "grain": "unit",
     "locus": "response",
     "min_repeats": 1,
-    "note": "kompilasi heuristik: respons konsiliatoris meredam pertukaran kasar lewat canda (charientismus)",
+    "note": "heuristic compile: a conciliatory reply defusing rough exchange through jest (charientismus)",
     "operation": "substitution",
     "template": [],
     "transforms": [
@@ -60,5 +60,9 @@
     "contoh": "kushala",
     "geometri": "kushala",
     "lisensi": "MIT"
-  }
+  },
+  "example_languages": [
+    "en",
+    "id"
+  ]
 }

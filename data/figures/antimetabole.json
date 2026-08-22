@@ -50,5 +50,9 @@
     "contoh": "kushala",
     "geometri": "kushala",
     "lisensi": "MIT"
-  }
+  },
+  "example_languages": [
+    "en",
+    "id"
+  ]
 }

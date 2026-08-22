@@ -32,7 +32,7 @@
     "class": "Lexical",
     "grain": "unit",
     "min_repeats": 1,
-    "note": "sisipan penyela kalimat",
+    "note": "an interruptive insertion within a sentence",
     "operation": "addition",
     "template": []
   },

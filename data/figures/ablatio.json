@@ -38,7 +38,7 @@
     "class": "Lexical",
     "grain": "word",
     "min_repeats": 1,
-    "note": "kompilasi heuristik: penghilangan segmen awal kata (aphaeresis)",
+    "note": "heuristic compile: removal of initial word segments (aphaeresis)",
     "operation": "deletion",
     "template": []
   },

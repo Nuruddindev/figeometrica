@@ -85,6 +85,17 @@ kenapa. Itu fitur, bukan bug: *NO SILENT PROMOTION*.
 Tulis dengan kata-kata sendiri. Definisi yang disalin dari sumber
 berhak cipta tidak diterima.
 
+### Kebijakan bahasa (CONTRACT §12.3)
+
+- `definition` dan semua field `note`: **hanya Inggris** — lapisan teori
+  satu bahasa supaya bisa dinilai di mana saja.
+- Teks contoh: **bahasa apa pun dipersilakan** — figur adalah pola
+  lintas-bahasa, jadi contoh Indonesia/Arab adalah bukti tesis, bukan
+  gangguan. Entri dengan contoh non-Inggris mendeklarasikannya:
+  `"example_languages": ["en", "id"]`.
+- Jangan mencampur bahasa dalam satu sekuens contoh — tiap sekuens
+  adalah satu wacana.
+
 ## Slot vocabulary yang dibutuhkan belum ada? Usulkan versi knowledge baru
 
 Jangan paksa slot lain menggantikan slot yang dibutuhkan:

@@ -30,7 +30,7 @@
     "class": "Lexical",
     "grain": "unit",
     "min_repeats": 2,
-    "note": "awal DAN akhir unit berturut (anaphora+epistrophe)",
+    "note": "both start AND end of consecutive units (anaphora+epistrophe)",
     "operation": "repetition",
     "template": []
   },

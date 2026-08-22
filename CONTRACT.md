@@ -338,19 +338,19 @@ Sixty CANONICAL figures that are truly executable and verified outweigh
 
 ## 12. Public Ledger — dataset JSON & knowledge versions
 
-Repo ini adalah permukaan kontribusi. SARVA adalah lab privat; di sini
-semua terekam sebagai file yang bisa diaudit CI.
+This repo is the contribution surface. SARVA is the private lab; here
+everything is recorded as CI-auditable files.
 
-### 12.1 Skema figur (`data/figures/*.json`)
+### 12.1 Figure schema (`data/figures/*.json`)
 
-Legacy blocks (`geometry`, `examples`, `attribution`) remain. Blok kontrak
-ditambahkan tanpa menghapus yang lama:
+Legacy blocks (`geometry`, `examples`, `attribution`) remain. Contract
+blocks are added without removing the old ones:
 
 ```json
 {
   "name": "apocope",
   "definition": "Cutting off final letter/syllable",
-  "geometry":   { "...": "blok warisan, dibiarkan" },
+  "geometry":   { "...": "legacy block, left untouched" },
   "signature": {
     "domain_id": "textual",
     "unit_id": "word",
@@ -365,23 +365,38 @@ ditambahkan tanpa menghapus yang lama:
   "epistemic": {
     "status": "WITNESS_TESTED",
     "legacy_status": null,
-    "note": "protokol deterministik lulus (mesin transformasi)"
-  }
+    "note": "deterministic protocol passed (transformation engine)"
+  },
+  "example_languages": ["en", "id"]
 }
 ```
 
-Aturan:
-- `signature` hanya boleh berisi slot dari manifest knowledge versi kanon.
-- `epistemic.status` WAJIB konsisten dengan bukti:
-  - `EXTRACTED` → signature ada, slot valid;
-  - `STRUCTURALLY_VALID` → ditambah bindings tidak INVALID;
-  - `WITNESS_TESTED` → ditambah protokol lulus (CI menjalankan ulang);
-  - `USER_ACCEPTED`/`CANONICAL` → hanya lewat merge oleh maintainer
-    (review PR = Meja Hakim publik).
-- Klaim status tanpa bukti = gagal CI. Inilah NO SILENT PROMOTION.
+Rules:
+- `signature` may only contain slots from the canonical knowledge manifest.
+- `epistemic.status` MUST be consistent with evidence:
+  - `EXTRACTED` → signature present, slots valid;
+  - `STRUCTURALLY_VALID` → plus bindings not INVALID;
+  - `WITNESS_TESTED` → plus protocol passes (CI re-runs it);
+  - `USER_ACCEPTED`/`CANONICAL` → only through maintainer merge
+    (PR review = the public Judgment Desk).
+- A status claimed without evidence fails CI. This is NO SILENT PROMOTION.
 
-### 12.2 Versi vocabulary (`data/knowledge/vN/`)
+### 12.2 Knowledge versions (`data/knowledge/vN/`)
 
-Setiap perubahan slot/binding karena penemuan baru = folder versi baru.
-Versi tertinggi = kanon; versi lama abadi sebagai rekam eksperimen.
-Struktur & aturan lengkap: `data/knowledge/README.md`.
+Every slot/binding change driven by a new discovery = a new version folder.
+Highest version = canonical; old versions stay immutable as the experiment
+log. Full structure & rules: `data/knowledge/README.md`.
+
+### 12.3 Language policy
+
+The theory layer is monoglot so it can be judged anywhere; the evidence
+layer is deliberately multilingual because figures are language-independent
+patterns — a cross-language instance *is* evidence for the thesis.
+
+- `definition`, all `note` fields, and every contract field name: **English
+  only** (the one canonical prose per figure).
+- Example text: **any natural language** — but an entry whose examples are
+  not exclusively English SHOULD declare them:
+  `"example_languages": ["en", "id", ...]`.
+- One example sequence must not mix languages mid-stream: each unit array
+  is a single discourse and must stay in one language.

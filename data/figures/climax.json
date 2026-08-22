@@ -33,7 +33,7 @@
     "class": "Lexical",
     "grain": "unit",
     "min_repeats": 2,
-    "note": "rantai anadiplosis >=2 (gradatio)",
+    "note": "anadiplosis chain >=2 (gradatio)",
     "operation": "repetition",
     "template": []
   },
@@ -52,5 +52,9 @@
     "contoh": "kushala",
     "geometri": "kushala",
     "lisensi": "MIT"
-  }
+  },
+  "example_languages": [
+    "en",
+    "id"
+  ]
 }
