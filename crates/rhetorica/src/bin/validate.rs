@@ -55,7 +55,7 @@ fn main() -> std::process::ExitCode {
 
     let mut errors = 0usize;
     let mut manual = 0usize;
-    let mut mesin = 0usize;
+    let mut machine = 0usize;
 
     for f in &base.figures {
         if f.geometry.is_none() {
@@ -73,7 +73,7 @@ fn main() -> std::process::ExitCode {
         }
 
         if terdeteksi(&f.name) {
-            mesin += 1;
+            machine += 1;
             for ex in &ex.positive {
                 if !temuan_untuk(&f.name, ex) {
                     eprintln!("[gagal] {}: contoh positif TIDAK memicu geometri: {:?}", f.name, ex);
@@ -88,16 +88,16 @@ fn main() -> std::process::ExitCode {
             }
         } else {
             manual += 1;
-            println!("[manual] {}: pola di luar keluarga matcher — butuh review maintainer (skema + contoh OK)", f.name);
+            println!("[manual] {}: pattern outside the matcher family — needs maintainer review (schema + examples OK)", f.name);
         }
     }
 
     let total_geometri = base.geometrized().count();
     println!(
-        "{} figur / {} ber-geometri ({} tervalidasi mesin, {} jalur manual), {} galat",
+        "{} figures / {} with geometry ({} machine-validated, {} manual route), {} errors",
         base.figures.len(),
         total_geometri,
-        mesin,
+        machine,
         manual,
         errors
     );
