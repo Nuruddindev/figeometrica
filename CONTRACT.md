@@ -336,14 +336,14 @@ separate the figure from its neighbors.
 Sixty CANONICAL figures that are truly executable and verified outweigh
 454 green-labeled ones that are not.
 
-## 12. Public Ledger — dataset JSON & versi vocabulary
+## 12. Public Ledger — dataset JSON & knowledge versions
 
 Repo ini adalah permukaan kontribusi. SARVA adalah lab privat; di sini
 semua terekam sebagai file yang bisa diaudit CI.
 
 ### 12.1 Skema figur (`data/figures/*.json`)
 
-Blok warisan (`geometry`, `examples`, `atribusi`) tetap. Blok kontrak
+Legacy blocks (`geometry`, `examples`, `attribution`) remain. Blok kontrak
 ditambahkan tanpa menghapus yang lama:
 
 ```json

@@ -83,7 +83,7 @@ enough.
    cargo run -p figeometrica-rhetorica --bin validate
    ```
 6. **Open a PR** — CI verifies automatically: pass = merged with your name
-   in the entry's `atribusi`; fail = you get the exact failing witness.
+   in the entry's `attribution`; fail = you get the exact failing witness.
    Review is our Judgment Desk — merge is what ratifies a figure.
 
 Patterns outside the matcher's current family (conceptual-class figures like

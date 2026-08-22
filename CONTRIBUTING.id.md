@@ -118,7 +118,7 @@ utas PR — utas itulah buku besar kami.
 ## Lisensi, atribusi & co-authorship
 
 - Kontribusi dilisensikan **MIT** sejak dibuka PR-nya (inbound = outbound).
-- Nama Anda tersimpan di field `atribusi` entri + CONTRIBUTORS.md.
+- Nama Anda tersimpan di field `attribution` entri + CONTRIBUTORS.md.
 - Kontributor dengan **≥ 10 entri diterima** atau berperan sebagai
   validator masuk daftar co-author publikasi dataset. Kriteria final
   diumumkan sebelum paper ditulis dan tidak berlaku surut.

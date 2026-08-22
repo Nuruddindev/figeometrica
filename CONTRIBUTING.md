@@ -96,7 +96,7 @@ PR thread — that thread *is* our ledger.
 
 - Contributions are licensed **MIT** from the moment the PR opens
   (inbound = outbound).
-- Your name goes into the entry's `atribusi` field + CONTRIBUTORS.md.
+- Your name goes into the entry's `attribution` field + CONTRIBUTORS.md.
 - Contributors with **≥ 10 accepted entries** or serving as validators
   join the dataset paper's public co-author list. Final criteria are
   announced before the paper is written and are not retroactive.

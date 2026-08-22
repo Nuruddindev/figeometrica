@@ -1,9 +1,4 @@
 {
-  "atribusi": {
-    "contoh": "kushala",
-    "geometri": "kushala",
-    "lisensi": "MIT"
-  },
   "categories": [
     "of Amplification"
   ],
@@ -58,5 +53,10 @@
     "payload_id": null,
     "scope_id": null,
     "unit_id": "word"
+  },
+  "attribution": {
+    "contoh": "kushala",
+    "geometri": "kushala",
+    "lisensi": "MIT"
   }
 }

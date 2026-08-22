@@ -1,5 +1,5 @@
 //! Sync geometry AND contract blocks from a SARVA database dump into the
-//! per-figure dataset — plus the reverse (`muat`) direction.
+//! per-figure dataset — plus the reverse (`import`) direction.
 //!
 //! SARVA remains the source of truth for definitions + compiled geometry;
 //! this repo owns examples and attribution. The dump carries the legacy
@@ -9,7 +9,7 @@
 //!
 //! CONTRACT.md §12: the dump now also carries each figure's `signature`
 //! and `epistemic` ladder state; both land in the dataset as contract
-//! blocks. The reverse direction (`muat`) emits SQL upserts from the
+//! blocks. The reverse direction (`import`) emits SQL upserts from the
 //! dataset's contract blocks so accepted contributions flow back into
 //! the vault.
 //!
@@ -34,7 +34,7 @@
 //!   2. Run:
 //!      cargo run -p figeometrica-rhetorica --bin sinkron -- /tmp/sarva_dump.json
 //!      (reverse direction:)
-//!      cargo run -p figeometrica-rhetorica --bin sinkron -- muat /tmp/kembali.sql
+//!      cargo run -p figeometrica-rhetorica --bin sinkron -- import /tmp/backflow.sql
 //!   3. Review with: git diff && cargo run -p figeometrica-rhetorica --bin validate
 //!      && cargo run -p figeometrica-rhetorica --bin sidang
 
@@ -58,37 +58,37 @@ struct DumpEntry {
     #[serde(default)]
     definition: Option<String>,
     geometri: Option<serde_json::Value>,
-    /// CONTRACT §2 signature (nama kolom DB; diterjemahkan ke blok publik).
+    /// CONTRACT §2 signature (DB column names; translated to the public block).
     #[serde(default)]
     signature: Option<serde_json::Value>,
-    /// CONTRACT §7 tangga epistemik.
+    /// CONTRACT §7 epistemic ladder.
     #[serde(default)]
     epistemic: Option<serde_json::Value>,
 }
 
-/// Blok `signature` gaya dump (kolom DB) → blok kontrak publik.
-/// Null di semua slot = tidak ada signature sungguhan → None.
-fn blok_signature(raw: &serde_json::Value) -> Option<serde_json::Value> {
+/// Dump-style `signature` block (DB columns) → public contract block.
+/// Null in every slot = no real signature → None.
+fn signature_block(raw: &serde_json::Value) -> Option<serde_json::Value> {
     let o = raw.as_object()?;
-    let ambil = |k: &str| o.get(k).and_then(|v| v.as_str()).filter(|s| !s.is_empty());
-    let domain = ambil("domain_id")?;
-    let unit = ambil("unit_id")?;
-    let anchor = ambil("anchor_id")?;
-    let operasi = ambil("operation_id")?;
+    let grab = |k: &str| o.get(k).and_then(|v| v.as_str()).filter(|s| !s.is_empty());
+    let domain = grab("domain_id")?;
+    let unit = grab("unit_id")?;
+    let anchor = grab("anchor_id")?;
+    let operation = grab("operation_id")?;
     let mut out = serde_json::Map::new();
     out.insert("domain_id".into(), serde_json::json!(domain));
     out.insert("unit_id".into(), serde_json::json!(unit));
-    match ambil("scope_id") {
+    match grab("scope_id") {
         Some(s) => out.insert("scope_id".into(), serde_json::json!(s)),
         None => out.insert("scope_id".into(), serde_json::Value::Null),
     };
     out.insert("anchor_id".into(), serde_json::json!(anchor));
-    out.insert("operation".into(), serde_json::json!(operasi));
-    match ambil("payload_id") {
+    out.insert("operation".into(), serde_json::json!(operation));
+    match grab("payload_id") {
         Some(p) => out.insert("payload_id".into(), serde_json::json!(p)),
         None => out.insert("payload_id".into(), serde_json::Value::Null),
     };
-    match ambil("locus_id") {
+    match grab("locus_id") {
         Some(l) => out.insert("locus_id".into(), serde_json::json!(l)),
         None => out.insert("locus_id".into(), serde_json::Value::Null),
     };
@@ -211,17 +211,17 @@ fn terjemahkan(geo: &serde_json::Value) -> Option<serde_json::Value> {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
 
-    // ── Arah balik: dataset → SQL upserts untuk vault ────────────────
-    if args.get(1).map(|a| a.as_str()) == Some("muat") {
-        let keluaran = args.get(2).cloned().unwrap_or_else(|| "/tmp/sarva_muat.sql".into());
-        muat(&PathBuf::from(&keluaran));
+    // ── Reverse direction: dataset → SQL upserts for the vault ──────
+    if args.get(1).map(|a| a.as_str()) == Some("import") {
+        let output = args.get(2).cloned().unwrap_or_else(|| "/tmp/sarva_import.sql".into());
+        import(&PathBuf::from(&output));
         return;
     }
 
-    // ── Arah utama: dump vault → dataset ─────────────────────────────
+    // ── Main direction: vault dump → dataset ────────────────────────
     let Some(dump_path) = args.get(1) else {
         eprintln!("Usage: sinkron <sarva_dump.json>");
-        eprintln!("       sinkron muat <keluaran.sql>");
+        eprintln!("       sinkron import <output.sql>");
         eprintln!("See the header comment of this file for how to create the dump.");
         std::process::exit(2);
     };
@@ -254,7 +254,7 @@ fn main() {
             Some(geo) => match terjemahkan(geo) {
                 Some(t) => Some(t),
                 None => {
-                    eprintln!("⚠ {}: geometri tidak bisa diterjemahkan, dilewati", e.name);
+                    eprintln!("⚠ {}: geometry not translatable, skipped", e.name);
                     None
                 }
             },
@@ -268,7 +268,7 @@ fn main() {
             &path,
             translated.as_ref().unwrap_or(&serde_json::Value::Null),
             e.definition.as_deref(),
-            e.signature.as_ref().and_then(blok_signature),
+            e.signature.as_ref().and_then(signature_block),
             e.epistemic.as_ref(),
         ) {
             println!("↺ {}: geometry/definition/contract copied from SARVA", e.name);
@@ -307,11 +307,11 @@ fn apply(
     let sig_equal = match (&signature_new, v.get("signature")) {
         (Some(s), Some(existing)) => s == existing,
         (Some(_), None) => false,
-        (None, _) => true, // tanpa signature upstream — biarkan blok lama
+        (None, _) => true, // no upstream signature — leave old block alone
     };
     let epi_equal = match (epistemic_new, v.get("epistemic")) {
         (Some(e), Some(existing)) => {
-            // bandingkan status+legacy saja; note boleh berbeda
+            // compare status+legacy only; free-form note may differ
             let status = |o: &serde_json::Value| o.get("status").cloned().unwrap_or(serde_json::json!(""));
             let legacy = |o: &serde_json::Value| o.get("legacy_status").cloned();
             status(e) == status(existing) && legacy(e) == legacy(existing)
@@ -360,10 +360,10 @@ fn apply(
     true
 }
 
-/// Arah balik (`muat`): baca blok kontrak dari dataset, tulis SQL upserts
-/// yang bisa diterapkan maintainer ke vault SARVA — kontribusi yang sudah
-/// disahkan di ledger publik mengalir kembali ke lab.
-fn muat(keluaran: &Path) {
+/// Reverse direction (`import`): read contract blocks from the dataset,
+/// emit SQL upserts the maintainer can apply to the SARVA vault —
+/// contributions ratified on the public ledger flow back into the lab.
+fn import(output: &Path) {
     let dataset_dir =
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../data/figures");
     let paths: Vec<PathBuf> = fs::read_dir(&dataset_dir)
@@ -383,12 +383,12 @@ fn muat(keluaran: &Path) {
             Err(_) => continue,
         };
         let Ok(v) = serde_json::from_str::<serde_json::Value>(&raw) else { continue };
-        let Some(nama) = v.get("name").and_then(|n| n.as_str()) else { continue };
+        let Some(name) = v.get("name").and_then(|n| n.as_str()) else { continue };
 
         if let Some(sig) = v.get("signature").filter(|s| s.is_object()) {
-            let ambil = |k: &str| sig.get(k).and_then(|x| x.as_str()).unwrap_or("");
-            if ambil("domain_id").is_empty() || ambil("anchor_id").is_empty() {
-                continue; // fail-closed: slot wajib kosong → dilewati
+            let grab = |k: &str| sig.get(k).and_then(|x| x.as_str()).unwrap_or("");
+            if grab("domain_id").is_empty() || grab("anchor_id").is_empty() {
+                continue; // fail-closed: a required slot is missing → skip
             }
             let opt = |k: &str| {
                 sig.get(k)
@@ -398,10 +398,10 @@ fn muat(keluaran: &Path) {
             };
             sql.push_str(&format!(
                 "INSERT INTO signatures (figure_id, domain_id, unit_id, scope_id, anchor_id, operation_id, payload_id, locus_id, provenance) \
-                 SELECT id, '{d}', '{u}', {sc}, '{a}', '{op}', {pl}, {lo}, 'public-ledger' FROM figures WHERE name='{nama}' \
+                 SELECT id, '{d}', '{u}', {sc}, '{a}', '{op}', {pl}, {lo}, 'public-ledger' FROM figures WHERE name='{name}' \
                  ON CONFLICT(figure_id) DO UPDATE SET domain_id='{d}', unit_id='{u}', scope_id={sc}, anchor_id='{a}', operation_id='{op}', payload_id={pl}, locus_id={lo}, provenance='public-ledger';\n",
-                d = ambil("domain_id"), u = ambil("unit_id"), sc = opt("scope_id"),
-                a = ambil("anchor_id"), op = ambil("operation"),
+                d = grab("domain_id"), u = grab("unit_id"), sc = opt("scope_id"),
+                a = grab("anchor_id"), op = grab("operation"),
                 pl = opt("payload_id"), lo = opt("locus_id"),
             ));
             n_sig += 1;
@@ -416,7 +416,7 @@ fn muat(keluaran: &Path) {
                 .unwrap_or_else(|| "NULL".into());
             sql.push_str(&format!(
                 "INSERT INTO figure_epistemic_state (figure_id, epistemic_status, legacy_status) \
-                 SELECT id, '{status}', {legacy} FROM figures WHERE name='{nama}' \
+                 SELECT id, '{status}', {legacy} FROM figures WHERE name='{name}' \
                  ON CONFLICT(figure_id) DO UPDATE SET epistemic_status='{status}', legacy_status={legacy}, updated_at=datetime('now');\n"
             ));
             n_epi += 1;
@@ -424,7 +424,7 @@ fn muat(keluaran: &Path) {
     }
 
     sql.push_str("COMMIT;\n");
-    fs::write(keluaran, sql).expect("tulis sql");
-    println!("muat: {n_sig} signature + {n_epi} state → {}", keluaran.display());
-    println!("Terapkan manual setelah review: sqlite3 vault.db < {keluaran}", keluaran = keluaran.display());
+    fs::write(output, sql).expect("write sql");
+    println!("import: {n_sig} signatures + {n_epi} states → {}", output.display());
+    println!("Apply manually after review: sqlite3 vault.db < {path}", path = output.display());
 }

@@ -1,9 +1,4 @@
 {
-  "atribusi": {
-    "contoh": "kushala",
-    "geometri": "kushala",
-    "lisensi": "MIT"
-  },
   "categories": [
     "of Balance"
   ],
@@ -50,5 +45,10 @@
     "payload_id": null,
     "scope_id": null,
     "unit_id": "phrase"
+  },
+  "attribution": {
+    "contoh": "kushala",
+    "geometri": "kushala",
+    "lisensi": "MIT"
   }
 }

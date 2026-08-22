@@ -1,33 +1,36 @@
-# Knowledge v1 — keadaan awal
+# Knowledge v1 — initial state
 
-**Dibuat**: 2026-08-23 · **Sumber**: snapshot tabel knowledge SARVA vault
-pasca implementasi CONTRACT.md v1 (Fase 1–5).
+**Created**: 2026-08-23 · **Source**: snapshot of the SARVA vault's
+knowledge tables after the CONTRACT.md v1 implementation (Phases 1–5).
 
-## Isi
+## Contents
 
-| Vocabulary | Jumlah | Catatan |
+| Vocabulary | Count | Notes |
 |---|---|---|
 | domains | 4 | textual, conceptual, entity, argumentative |
-| units | 12 | grapheme…concept (termasuk unit entitas untuk figur personifikasi) |
+| units | 12 | grapheme…concept (includes entity units for personification figures) |
 | scopes | 5 | phonological-form, orthographic-form, token-stream, representation, discourse |
-| anchors | 10 | posisi segmen (initial/final/medial), insertion-point, whole-unit, cross-boundary, + anchor entitas (non-person, person, non-human, character) |
+| anchors | 10 | segment positions (initial/final/medial), insertion-point, whole-unit, cross-boundary, + entity anchors (non-person, person, non-human, character) |
 | payloads | 7 | segment, letter, syllable, person, human-attribute, characterological-attribute, preemptive-response |
 | loci | 9 | initial, medial, terminal, response, distributed, clustered, every, cross_unit, alternating |
-| bindings | 9 | semuanya status `valid`; kombinasi lain = UNKNOWN (legal tapi belum diuji) |
+| bindings | 9 | all status `valid`; other combinations = UNKNOWN (legal but untested) |
 
-## Mengapa keadaan ini jadi v1
+## Why this state became v1
 
-Ini titik ketika geometrisasi berpindah dari vault privat SARVA ke ledger
-publik figeometrica. Angka-angka di atas bukan desain teoretis — semuanya
-lahir dari 455 definisi riil yang diekstraksi/migrasi/disidang:
+This is the point where geometrization moved from SARVA's private vault
+to figeometrica's public ledger. The numbers above are not theoretical
+design — each one was born from real figures among the 455 definitions
+that were extracted, migrated, and put on trial:
 
-- anchor entitas (`non-person`, dll.) lahir dari prosopopoeia;
-- `preemptive-response` lahir dari procatalepsis;
-- locus `alternating` lahir dari abecedarian;
-- 9 bindings valid = kombinasi yang benar-benar dipakai figur bersignature.
+- entity anchors (`non-person`, etc.) — demanded by prosopopoeia;
+- `preemptive-response` — demanded by procatalepsis;
+- locus `alternating` — demanded by abecedarian;
+- 9 valid bindings = exactly the combinations used by signature-bearing
+  figures.
 
-## Yang TIDAK ada di v1 (dan itu disengaja)
+## What v1 does NOT contain (by design)
 
-Tidak ada slot "buat jaga-jaga". Setiap slot di sini punya figur pemesan.
-Vocabulary kosong yang menggoda (mis. scope generik seperti `other`)
-sengaja ditolak sesuai prinsip *scope bukan tempat sampah* (CONTRACT §4).
+There are no just-in-case slots. Every slot here has a figure that
+ordered it. Tempting empty vocabulary (e.g. a generic scope like `other`)
+was deliberately rejected per the *scope is not a junk drawer* principle
+(CONTRACT §4).

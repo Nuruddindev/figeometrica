@@ -45,9 +45,9 @@ fn main() {
     let mut out = stdout.lock();
 
     let mut total = 0usize;
-    let mut diperbarui = 0usize;
-    let mut dilewati_manual = 0usize;
-    let mut gagal_kompilasi = 0usize;
+    let mut updated = 0usize;
+    let mut manual_protected = 0usize;
+    let mut failed_compile = 0usize;
 
     for line in reader.lines() {
         let line = line.expect("baca baris");
@@ -64,13 +64,13 @@ fn main() {
         total += 1;
 
         if !dapat_di_regenerate(&b.geometri) {
-            dilewati_manual += 1;
+            manual_protected += 1;
             continue;
         }
 
         match compile_definition(&b.definition) {
             Some(d) if d.confidence >= CONFIDENCE_FLOOR => {
-                diperbarui += 1;
+                updated += 1;
                 let json = ke_json_konvensi_sarva(&d.pattern)
                     .replace('\'', "''");
                 writeln!(
@@ -87,7 +87,7 @@ fn main() {
                 );
             }
             None => {
-                gagal_kompilasi += 1;
+                failed_compile += 1;
             }
         }
     }
@@ -106,12 +106,12 @@ fn main() {
         for b in arr {
             total += 1;
             if !dapat_di_regenerate(&b.geometri) {
-                dilewati_manual += 1;
+                manual_protected += 1;
                 continue;
             }
             match compile_definition(&b.definition) {
                 Some(d) if d.confidence >= CONFIDENCE_FLOOR => {
-                    diperbarui += 1;
+                    updated += 1;
                     let json =
                         ke_json_konvensi_sarva(&d.pattern).replace('\'', "''");
                     writeln!(
@@ -127,6 +127,6 @@ fn main() {
     }
 
     eprintln!(
-        "recompile: {total} baris / {diperbarui} SQL / {dilewati_manual} manual-dilindungi / {gagal_kompilasi} tanpa hasil"
+        "recompile: {total} rows / {updated} SQL / {manual_protected} manual-protected / {failed_compile} without result"
     );
 }

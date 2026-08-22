@@ -62,12 +62,12 @@ fn main() -> std::process::ExitCode {
             continue;
         }
         let Some(ex) = &f.examples else {
-            eprintln!("[gagal] {}: geometri ada tetapi 'examples' kosong — wajib minimal satu contoh positif", f.name);
+            eprintln!("[fail] {}: geometry present but 'examples' empty — at least one positive example required", f.name);
             errors += 1;
             continue;
         };
         if ex.positive.is_empty() {
-            eprintln!("[gagal] {}: tidak ada contoh positif", f.name);
+            eprintln!("[fail] {}: no positive example", f.name);
             errors += 1;
             continue;
         }

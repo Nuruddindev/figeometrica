@@ -368,7 +368,7 @@ pub struct DraftGeometri {
 fn draft(anchor: Anchor, class: ElementClass, grain: Option<&str>, op: Operation,
          min_repeats: usize, confidence: f32, family: &'static str,
          locus_id: Option<&str>, transforms: &[(&str, Direction)],
-         catatan: &str) -> DraftGeometri {
+         note: &str) -> DraftGeometri {
     DraftGeometri {
         pattern: FigurePattern {
             name: String::new(),
@@ -383,7 +383,7 @@ fn draft(anchor: Anchor, class: ElementClass, grain: Option<&str>, op: Operation
                 .iter()
                 .map(|(axis, dir)| Transform::new(axis, *dir))
                 .collect(),
-            note: Some(format!("kompilasi heuristik: {catatan}")),
+            note: Some(format!("heuristic compile: {note}")),
         },
         confidence,
         family,
@@ -485,14 +485,14 @@ pub fn compile_definition(definition: &str) -> Option<DraftGeometri> {
             "melampaui baseline skala (hyperbole)"));
     }
 
-    // ── SUBTRACTION / SUBSTITUTION (understatement: transformasi turun) ──
-    let turun = d.contains("reduce") || d.contains("diminish") || d.contains("lessen")
+    // ── SUBTRACTION / SUBSTITUTION (understatement: downward transforms) ──
+    let downward = d.contains("reduce") || d.contains("diminish") || d.contains("lessen")
         || d.contains("lower than") || d.contains("beneath the");
-    if turun && d.contains("conclud") {
+    if downward && d.contains("conclud") {
         c.push(draft(Anchor::Final, ElementClass::Conceptual, Some("discourse"), Operation::Deletion, 1, 0.75, "understatement", Some("terminal"),
             &[("force", Direction::Down)],
-            "penutup yang meredam gaya sebelumnya (abating/anesis)"));
-    } else if turun && (d.contains("expected") || d.contains("anticipat")) {
+            "a closing figure that dampens the preceding style (abating/anesis)"));
+    } else if downward && (d.contains("expected") || d.contains("anticipat")) {
         c.push(draft(Anchor::WholeUnit, ElementClass::Conceptual, Some("discourse"), Operation::Deletion, 1, 0.70, "understatement", None,
             &[("status", Direction::Down)],
             "di bawah skala ekspektasi konteks (abbaser)"));
@@ -1322,7 +1322,7 @@ mod tests {
 
     #[test]
     fn locus_vocabulary_grew_from_evidence() {
-        // commoratio: distributed recurrence — varian lahir dari figur ini
+        // commoratio: distributed recurrence — variant born from this figure
         let cm = compile_definition("Repetition of an argumentative anchor \
             across multiple discourse positions, with intervening material \
             permitted between occurrences.").unwrap();

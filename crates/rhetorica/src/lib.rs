@@ -30,7 +30,7 @@ pub struct Examples {
     pub negative: Vec<Vec<String>>,
 }
 
-/// CONTRACT.md §7 — posisi figur di tangga epistemik + catatan.
+/// CONTRACT.md §7 — the figure's position on the epistemic ladder + note.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Epistemic {
     pub status: String,
@@ -49,10 +49,10 @@ pub struct FigureEntry {
     /// Field name is English "geometry"; Indonesian "geometri" accepted for backward compat.
     #[serde(default, alias = "geometri")]
     pub geometry: Option<FigurePattern>,
-    /// CONTRACT §2 — geometric signature (blok kontrak; opsional).
+    /// CONTRACT §2 — geometric signature (contract block; optional).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub signature: Option<figeometrica_core::FigureSignature>,
-    /// CONTRACT §7/§12 — tangga epistemik (opsional).
+    /// CONTRACT §7/§12 — epistemic ladder (optional).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub epistemic: Option<Epistemic>,
     #[serde(default)]
@@ -60,9 +60,10 @@ pub struct FigureEntry {
     /// Examples: English "examples" with "positive"/"negative"; Indonesian "contoh" with "positif"/"negatif" accepted.
     #[serde(default, alias = "contoh")]
     pub examples: Option<Examples>,
-    /// GitHub usernames / attribution for this entry.
-    #[serde(default)]
-    pub atribusi: Option<serde_json::Value>,
+    /// GitHub usernames / attribution for this entry
+    /// (Indonesian "atribusi" accepted for backward compat).
+    #[serde(default, alias = "atribusi")]
+    pub attribution: Option<serde_json::Value>,
 }
 
 /// The rhetoric theory base.

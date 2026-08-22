@@ -1,6 +1,4 @@
 {
-  "versi": 1,
-  "dibuat": "2026-08-23",
   "sumber": "snapshot tabel knowledge SARVA vault pasca Fase 1-5 (CONTRACT.md v1)",
   "catatan": "Versi TERTINGGI di folder ini adalah kanon. Versi lama abadi (immutable) sebagai rekam jejak eksperimen.",
   "domains": [
@@ -267,5 +265,9 @@
       "payload_id": "characterological-attribute",
       "status": "valid"
     }
-  ]
+  ],
+  "version": 1,
+  "created": "2026-08-23",
+  "source": "snapshot of the SARVA vault knowledge tables after Phases 1-5 (CONTRACT.md v1)",
+  "note": "The HIGHEST version in this folder is canonical. Old versions stay immutable as an experiment log."
 }
