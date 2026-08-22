@@ -1,12 +1,18 @@
-# Berkontribusi
+# Contributing Guide · Panduan Berkontribusi
 
-Aturan mainnya satu kalimat: **klaim harus berbukti.** Semua yang ada di
-repo ini bisa diperiksa mesin — termasuk klaim Anda. Gerbangnya jalan di
-CI setiap PR, dan versi lokalnya sama persis.
+*One rule: every claim must carry evidence — and machines check it.*
 
-## Menambah / memperbaiki satu figur = satu file JSON
+*Satu aturan: setiap klaim harus berbukti — dan mesin yang memeriksanya.*
 
-Buka `data/figures/<nama>.json`. Strukturnya:
+---
+
+## 1 · Adding or fixing a figure = one JSON file
+
+Everything lives in `data/figures/<name>.json`:
+
+## 1 · Menambah / memperbaiki satu figur = satu file JSON
+
+Semuanya ada di `data/figures/<nama>.json`:
 
 ```json
 {
@@ -36,35 +42,61 @@ Buka `data/figures/<nama>.json`. Strukturnya:
 }
 ```
 
-### Aturan blok `signature` (CONTRACT.md §2, §12)
+### Rules for the `signature` block · Aturan blok `signature`
+(CONTRACT.md §2, §12)
 
-- Semua slot **wajib** berasal dari manifest knowledge versi kanon:
-  `data/knowledge/vN/manifest.json` — N tertinggi adalah kanon.
-- Slot yang tidak relevan: `null`, bukan nilai karangan.
-- `scope` bukan tempat sampah: kalau tak yakin, biarkan `null`.
+**EN** — Every slot must come from the canonical knowledge manifest
+(`data/knowledge/vN/manifest.json`; highest N wins). Slots that don't
+apply get `null`, never invented values. `scope` is not a junk drawer:
+if unsure, leave it `null`.
 
-### Aturan blok `epistemic` (tangga status)
+**ID** — Semua slot wajib berasal dari manifest knowledge versi kanon
+(`data/knowledge/vN/manifest.json`; N tertinggi adalah kanon). Slot yang
+tidak relevan diisi `null`, bukan nilai karangan. `scope` bukan tempat
+sampah: kalau tak yakin, biarkan `null`.
 
-| Status Anda klaim | Syarat yang dicek CI |
+### Rules for the `epistemic` block · Aturan blok `epistemic`
+
+| Your claim · Klaim Anda | What CI checks · Yang dicek CI |
 |---|---|
-| `EXTRACTED` | signature ada & slot valid |
-| `STRUCTURALLY_VALID` | + bindings bukan INVALID |
-| `WITNESS_TESTED` | + protokol witness lulus (CI menjalankan ulang) |
-| `USER_ACCEPTED` / `CANONICAL` | + merge oleh maintainer |
+| `EXTRACTED` | signature present & slots valid · ada & slot valid |
+| `STRUCTURALLY_VALID` | + bindings not INVALID · bindings bukan INVALID |
+| `WITNESS_TESTED` | + witness protocol re-run passes · protokol lulus ulang |
+| `USER_ACCEPTED` / `CANONICAL` | + maintainer merge · merge oleh maintainer |
 
-Mengklaim status tanpa bukti = PR gagal CI dengan pesan yang menjelaskan
-kenapa. Itu fitur, bukan bug: *NO SILENT PROMOTION*.
+**EN** — Claiming a status without evidence fails CI with a message
+explaining why. That's a feature, not a bug: *NO SILENT PROMOTION*.
 
-### Definisi prosa
+**ID** — Mengklaim status tanpa bukti membuat PR gagal CI dengan pesan
+yang menjelaskan kenapa. Itu fitur, bukan bug: *NO SILENT PROMOTION*.
 
-Tulis dengan kata-kata sendiri. Definisi yang disalin dari sumber
-berhak cipta tidak diterima.
+### Prose definitions · Definisi prosa
 
-## Slot vocabulary yang dibutuhkan belum ada?
+**EN** — Write definitions in your own words. Text copied from
+copyrighted sources will not be accepted.
 
-Jangan paksa slot lain. Ajukan **versi knowledge baru**:
+**ID** — Tulis dengan kata-kata sendiri. Definisi yang disalin dari
+sumber berhak cipta tidak diterima.
 
-1. `cp -r data/knowledge/v2 data/knowledge/v3` (atau N tertinggi saat ini)
+---
+
+## 2 · Missing a vocabulary slot? Propose a knowledge version
+
+**EN** — Never force an unrelated slot into place. Instead:
+
+1. Copy the current highest version: `cp -r data/knowledge/v2 data/knowledge/v3`
+2. Add your slot/binding in `v3/manifest.json`
+3. Write `v3/README.md`: which slot, which figure demands it, and the
+   experiment/example that revealed the need
+4. Reference that folder in your PR
+
+Old versions are never edited — they are the experiment log. Details in
+[`data/knowledge/README.md`](data/knowledge/README.md).
+
+**ID** — Jangan paksa slot lain menggantikan slot yang dibutuhkan.
+Ajukan **versi knowledge baru**:
+
+1. Salin versi tertinggi saat ini: `cp -r data/knowledge/v2 data/knowledge/v3`
 2. Tambah slot/binding di `v3/manifest.json`
 3. Tulis `v3/README.md`: slot apa, figur mana yang membutuhkan, dari
    eksperimen/contoh apa ditemukan
@@ -73,7 +105,11 @@ Jangan paksa slot lain. Ajukan **versi knowledge baru**:
 Versi lama tidak pernah diedit — mereka adalah rekam jejak eksperimen.
 Detail: [`data/knowledge/README.md`](data/knowledge/README.md).
 
-## Verifikasi lokal sebelum push
+---
+
+## 3 · Verify locally before pushing
+
+## 3 · Verifikasi lokal sebelum push
 
 ```bash
 cargo test --workspace
@@ -81,11 +117,20 @@ cargo run -q -p figeometrica-rhetorica --bin sidang -- --ci
 cargo run -q -p figeometrica-rhetorica --bin validate
 ```
 
-Kalau ketiganya hijau, CI juga akan hijau.
+**EN** — If all three are green, CI will be green too.
 
-## Review = Meja Hakim
+**ID** — Kalau ketiganya hijau, CI juga akan hijau.
 
-PR yang lulus CI direview maintainer. Merge adalah tindakan pengesahan:
-di situ figur naik ke `USER_ACCEPTED`, dan hanya lewat jalur ini sebuah
-figur bisa mencapai `CANONICAL`. Riwayat review tersimpan permanen di
-PR — itulah buku besar kami.
+---
+
+## 4 · Review is our Judgment Desk
+
+**EN** — PRs that pass CI are reviewed by the maintainer. Merge is the act
+of ratification: that's where a figure rises to `USER_ACCEPTED`, and only
+this path reaches `CANONICAL`. The review history lives forever in the
+PR thread — that thread *is* our ledger.
+
+**ID** — PR yang lulus CI direview maintainer. Merge adalah tindakan
+pengesahan: di situ figur naik ke `USER_ACCEPTED`, dan hanya lewat jalur
+ini sebuah figur bisa mencapai `CANONICAL`. Riwayat review tersimpan
+permanen di utas PR — utas itulah buku besar kami.
