@@ -89,6 +89,8 @@ berhak cipta tidak diterima.
 
 - `definition` dan semua field `note`: **hanya Inggris** — lapisan teori
   satu bahasa supaya bisa dinilai di mana saja.
+- Glosarium Indonesia dipersilakan sebagai field paralel berakhiran `_id`
+  (mis. `definition_id`) — tidak pernah menggantikan field kanon Inggris.
 - Teks contoh: **bahasa apa pun dipersilakan** — figur adalah pola
   lintas-bahasa, jadi contoh Indonesia/Arab adalah bukti tesis, bukan
   gangguan. Entri dengan contoh non-Inggris mendeklarasikannya:

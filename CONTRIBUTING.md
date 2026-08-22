@@ -66,6 +66,8 @@ sources will not be accepted.
 
 - `definition` and all `note` fields: **English only** — the theory layer
   is monoglot so it can be judged anywhere.
+- Indonesian glosses are welcome as parallel fields with the `_id` suffix
+  (e.g. `definition_id`) — they never replace the canonical English field.
 - Example text: **any language welcome** — figures are
   language-independent patterns, so an Indonesian or Arabic instance is
   evidence for the thesis, not noise. Entries with non-English examples

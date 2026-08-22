@@ -350,6 +350,7 @@ blocks are added without removing the old ones:
 {
   "name": "apocope",
   "definition": "Cutting off final letter/syllable",
+  "definition_id": "Penghapusan bunyi/huruf di akhir kata",
   "geometry":   { "...": "legacy block, left untouched" },
   "signature": {
     "domain_id": "textual",
@@ -395,6 +396,9 @@ patterns — a cross-language instance *is* evidence for the thesis.
 
 - `definition`, all `note` fields, and every contract field name: **English
   only** (the one canonical prose per figure).
+- An optional Indonesian gloss `definition_id` MAY accompany it — the
+  `*_id` suffix is the reserved convention for Indonesian parallels of any
+  prose field. It never replaces the canonical English field.
 - Example text: **any natural language** — but an entry whose examples are
   not exclusively English SHOULD declare them:
   `"example_languages": ["en", "id", ...]`.
