@@ -24,8 +24,15 @@ Example — `tmesis` ("abso-bloody-lutely"), as stored in
 [`data/figures/tmesis.json`](data/figures/tmesis.json):
 
 ```json
-{ "jangkar": "Sisipan", "kelas": "Leksikal", "satuan": "kata",
-  "operasi": "adjectio", "minim_ulangan": 1, "template": [] }
+{
+    "anchor": "Insertion",
+    "class": "Lexical",
+    "grain": "word",
+    "min_repeats": 1,
+    "note": "insertion in the middle of a word/phrase",
+    "operation": "addition",
+    "template": []
+  }
 ```
 
 ## Crates
