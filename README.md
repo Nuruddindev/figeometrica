@@ -1,5 +1,7 @@
 # Figeometrica
 
+*[Versi Indonesia](README.id.md) · English version*
+
 **Figures are geometric.** Every rhetorical figure — if well defined — is an
 operation over a sequence: *what operation, at which anchor, on which grain,
 repeated how many times*. Figeometrica turns that thesis into executable
@@ -10,14 +12,33 @@ with classical rhetoric — the world's oldest text-analysis taxonomy) compiled
 into structured, machine-checkable specifications, plus engines that execute
 them deterministically and auditably.
 
-**Why does this matter?** Read the [manifesto](MANIFESTO.md) — bilingual,
-five minutes.
+**Why does this matter?** Read the [manifesto](MANIFESTO.md) — five minutes.
+
+The classical thesis —
 
 ```
 figure = OPERATION × ANCHOR × GRAIN × REPETITION
-         (adjectio | detractio | immutatio | transmutatio | repetitio)
-         × (initial | final | insertion | whole-unit | cross-unit)
-         × (grapheme | word | phrase | unit | discourse)
+```
+
+— compiles, under [CONTRACT.md](CONTRACT.md), into an executable **signature**
+whose slot vocabularies live in a versioned knowledge manifest
+([`data/knowledge/v1/manifest.json`](data/knowledge/v1/manifest.json) is
+canonical today):
+
+```
+FigureSignature = domain    ∈ {textual | conceptual | entity | argumentative}
+                × unit      ∈ {grapheme … concept}
+                × scope     ∈ {phonological-form … discourse}
+                × anchor    ∈ {initial/final/medial-segment, insertion-point,
+                               whole-unit, cross-boundary,
+                               person | non-person | non-human | character}
+                × operation ∈ {adjectio | detractio | immutatio |
+                               transmutatio | repetitio}   ← frozen term set
+                × payload   ∈ {segment, letter, syllable, person, …}
+                × locus     ∈ {initial, medial, terminal, response,
+                               distributed, clustered, every,
+                               cross_unit, alternating}
+                [+ result, + constraints]
 ```
 
 Example — `tmesis` ("abso-bloody-lutely"), as stored in
@@ -25,14 +46,23 @@ Example — `tmesis` ("abso-bloody-lutely"), as stored in
 
 ```json
 {
+  "signature": {
+    "domain_id": "textual",
+    "unit_id": "word",
+    "anchor_id": "insertion-point",
+    "operation": "adjectio"
+  },
+  "epistemic": {
+    "status": "STRUCTURALLY_VALID"
+  },
+  "geometry": {
     "anchor": "Insertion",
     "class": "Lexical",
     "grain": "word",
     "min_repeats": 1,
-    "note": "insertion in the middle of a word/phrase",
-    "operation": "addition",
-    "template": []
+    "operation": "addition"
   }
+}
 ```
 
 ## Crates
