@@ -92,7 +92,7 @@ parenthesis); the rhetoric theory base is being geometrized incrementally.
 
 ## Participate
 
-447 of 456 figures still need their geometry compiled — and the machine
+447 of 456 figures await geometric compilation and verification — and the machine
 checks your work: every contribution ships with example sentences that CI
 runs through the deterministic matcher. **No coding, no Git required** —
 your first figure can be done entirely in the browser (see

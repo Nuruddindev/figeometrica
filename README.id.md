@@ -92,7 +92,7 @@ parenthesis); basis teori retorika digeometrisasi bertahap.
 
 ## Ikut berkontribusi
 
-447 dari 456 figur masih menunggu geometrinya dikompilasi — dan mesin
+447 dari 456 figur menunggu kompilasi geometris dan verifikasi — dan mesin
 memeriksa pekerjaan Anda: setiap kontribusi membawa kalimat contoh yang
 dijalankan CI lewat matcher deterministik. **Tanpa coding, tanpa Git** —
 figur pertama bisa dikerjakan sepenuhnya di peramban (lihat
