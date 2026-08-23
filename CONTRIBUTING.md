@@ -3,8 +3,8 @@
 # Contributing to Figeometrica
 
 One rule: **every claim must carry evidence.** Everything in this repo is
-machine-checkable — including your claims. The gate runs on every PR in
-CI, and the local version is identical.
+machine-checkable — including your claims. The gate runs on every pull request (PR) in
+continuous integration (CI), and the local version is identical.
 
 ## Adding or fixing a figure = one JSON file
 

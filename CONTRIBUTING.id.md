@@ -8,7 +8,7 @@ dapat dideteksi dan diaudit mesin. Anda tidak perlu menulis kode; satu
 file JSON + contoh kalimat sudah cukup.
 
 Aturan mainnya satu kalimat: **klaim harus berbukti.** Gerbangnya jalan
-di CI setiap PR, dan versi lokalnya sama persis.
+di continuous integration (CI) setiap pull request (PR), dan versi lokalnya sama persis.
 
 ## Tesis dalam satu baris
 
