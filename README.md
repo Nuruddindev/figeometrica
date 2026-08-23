@@ -122,6 +122,9 @@ your first figure can be done entirely in the browser (see
    cargo run -p figeometrica-rhetorica --bin sidang -- --ci
    cargo run -p figeometrica-rhetorica --bin validate
    ```
+
+   *(`sidang` — Indonesian for "the hearing", as in a thesis defense: your
+   definition defends itself before its witness.)*
 6. **Open a PR** — CI verifies automatically: pass = merged with your name
    in the entry's `attribution`; fail = you get the exact failing witness.
    Review is our Judgment Desk — merge is what ratifies a figure.

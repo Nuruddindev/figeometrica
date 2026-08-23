@@ -32,9 +32,9 @@
 //!         LEFT JOIN figure_epistemic_state e ON e.figure_id=f.id
 //!         WHERE f.definition IS NOT NULL;" > /tmp/sarva_dump.json
 //!   2. Run:
-//!      cargo run -p figeometrica-rhetorica --bin sinkron -- /tmp/sarva_dump.json
+//!      cargo run -p figeometrica-rhetorica --bin sync -- /tmp/sarva_dump.json
 //!      (reverse direction:)
-//!      cargo run -p figeometrica-rhetorica --bin sinkron -- import /tmp/backflow.sql
+//!      cargo run -p figeometrica-rhetorica --bin sync -- import /tmp/backflow.sql
 //!   3. Review with: git diff && cargo run -p figeometrica-rhetorica --bin validate
 //!      && cargo run -p figeometrica-rhetorica --bin sidang
 
@@ -220,8 +220,8 @@ fn main() {
 
     // ── Main direction: vault dump → dataset ────────────────────────
     let Some(dump_path) = args.get(1) else {
-        eprintln!("Usage: sinkron <sarva_dump.json>");
-        eprintln!("       sinkron import <output.sql>");
+        eprintln!("Usage: sync <sarva_dump.json>");
+        eprintln!("       sync import <output.sql>");
         eprintln!("See the header comment of this file for how to create the dump.");
         std::process::exit(2);
     };

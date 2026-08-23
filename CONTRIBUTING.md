@@ -56,6 +56,10 @@ cargo run -q -p figeometrica-rhetorica --bin validate
 
 If all three are green, CI will be green too.
 
+> *`sidang`* is Indonesian for **"the hearing"** — as in a thesis defense:
+> the session where every definition must defend itself against its witness,
+> with CI presiding.
+
 ---
 
 ## What to put in the figure file
