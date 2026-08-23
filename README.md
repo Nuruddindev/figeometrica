@@ -141,8 +141,8 @@ Requirements: [git](https://git-scm.com) and Rust (any recent stable).
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # 2. Get the project
-git clone https://github.com/Nuruddindev/figeomatrica.git
-cd figeomatrica
+git clone https://github.com/Nuruddindev/figeometrica.git
+cd figeometrica
 
 # 3. Verify everything works (should end in "test result: ok")
 cargo test --workspace

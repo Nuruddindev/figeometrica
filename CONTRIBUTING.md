@@ -14,7 +14,7 @@ are students and scholars of linguistics, rhetoric, and philosophy.
 ### Way A — entirely in your browser (recommended for your first figure)
 
 1. **Create a free [GitHub](https://github.com) account**, then open
-   [the repository](https://github.com/Nuruddindev/figeomatrica) and press
+   [the repository](https://github.com/Nuruddindev/figeometrica) and press
    the **Fork** button (top right). *Fork* = your own copy of the project,
    under your account. Nothing you do can break the original.
 2. **Claim a figure** — open an issue with the

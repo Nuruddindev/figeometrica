@@ -17,7 +17,7 @@ kami adalah mahasiswa dan akademisi linguistik, retorika, dan filsafat.
 ### Jalur A — sepenuhnya di peramban (disarankan untuk figur pertama)
 
 1. **Buat akun [GitHub](https://github.com) gratis**, lalu buka
-   [repositorinya](https://github.com/Nuruddindev/figeomatrica) dan tekan
+   [repositorinya](https://github.com/Nuruddindev/figeometrica) dan tekan
    tombol **Fork** (kanan atas). *Fork* = salinan proyek milik Anda
    sendiri, di akun Anda. Apa pun yang Anda lakukan tak akan merusak
    aslinya.
