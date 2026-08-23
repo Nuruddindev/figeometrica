@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: >-
+  If you use Figeometrica, please cite it using this metadata.
+title: Figeometrica — executable theory infrastructure for rhetorical figures
+abstract: >-
+  A theory-compilation framework that turns classical rhetoric — the world's
+  oldest taxonomy of text analysis, ~456 named figures of speech defined only
+  in prose — into structured, machine-checkable specifications. Every figure
+  becomes a FigureSignature (operation × anchor × grain × repetition, extended
+  to a versioned slot lattice); a deterministic matcher produces byte-exact
+  evidence; a witness protocol with inverse reconstruction makes every
+  definition falsifiable. The dataset ships with an evidence ladder enforced by
+  continuous integration: no status is claimed without publicly re-runnable
+  proof.
+authors:
+  - given-names: Nuruddin
+    family-names: Asyhadie
+    alias: Nuruddindev
+    website: https://github.com/Nuruddindev
+  - alias: kushala
+    website: https://github.com/kushala
+keywords:
+  - rhetoric
+  - computational-humanities
+  - text-analysis
+  - natural-language-processing
+  - open-data
+  - rust
+license: MIT
+repository-code: https://github.com/Nuruddindev/figeometrica
+version: v0.9.0
+date-released: "2026-08-23"

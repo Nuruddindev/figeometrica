@@ -1,0 +1,32 @@
+{
+  "title": "Figeometrica — executable theory infrastructure for rhetorical figures",
+  "description": "A theory-compilation framework that turns classical rhetoric (≈456 named figures of speech, historically defined only in prose) into structured, machine-checkable specifications. Includes: per-figure JSON entries with FigureSignature contract blocks and an evidence ladder enforced by CI; a deterministic matcher producing byte-exact evidence spans; a witness protocol with inverse reconstruction; versioned vocabulary manifests recording how the theory itself evolves. Multilingual evidence layer (English/Indonesian).",
+  "creators": [
+    {
+      "name": "Nuruddin Asyhadie (Nuruddindev)",
+      "orcid": ""
+    },
+    {
+      "name": "kushala"
+    }
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "upload_type": "dataset",
+  "keywords": [
+    "rhetoric",
+    "computational humanities",
+    "text analysis",
+    "natural language processing",
+    "open data",
+    "rust"
+  ],
+  "language": "eng",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/Nuruddindev/figeometrica",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}
