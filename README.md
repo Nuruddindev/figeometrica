@@ -94,8 +94,9 @@ parenthesis); the rhetoric theory base is being geometrized incrementally.
 
 447 of 456 figures still need their geometry compiled — and the machine
 checks your work: every contribution ships with example sentences that CI
-runs through the deterministic matcher. No code required; one JSON file is
-enough.
+runs through the deterministic matcher. **No coding, no Git required** —
+your first figure can be done entirely in the browser (see
+[CONTRIBUTING.md](CONTRIBUTING.md), "Way A"). One JSON file is enough.
 
 **How to contribute (± 15 minutes for your first figure):**
 

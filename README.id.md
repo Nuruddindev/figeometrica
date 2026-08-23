@@ -94,7 +94,9 @@ parenthesis); basis teori retorika digeometrisasi bertahap.
 
 447 dari 456 figur masih menunggu geometrinya dikompilasi — dan mesin
 memeriksa pekerjaan Anda: setiap kontribusi membawa kalimat contoh yang
-dijalankan CI lewat matcher deterministik. Tanpa kode; satu file JSON cukup.
+dijalankan CI lewat matcher deterministik. **Tanpa coding, tanpa Git** —
+figur pertama bisa dikerjakan sepenuhnya di peramban (lihat
+[CONTRIBUTING.id.md](CONTRIBUTING.id.md), "Jalur A"). Satu file JSON cukup.
 
 **Cara berkontribusi (± 15 menit untuk figur pertama Anda):**
 

@@ -3,12 +3,62 @@
 # Contributing to Figeometrica
 
 One rule: **every claim must carry evidence.** Everything in this repo is
-machine-checkable — including your claims. The gate runs on every pull request (PR) in
-continuous integration (CI), and the local version is identical.
+machine-checkable — including your claims. The gate runs on every PR in
+CI, and the local version is identical.
 
-## Adding or fixing a figure = one JSON file
+## Two ways to contribute
 
-Open `data/figures/<name>.json`. The structure:
+You do **not** need to know programming or Git. Most of our contributors
+are students and scholars of linguistics, rhetoric, and philosophy.
+
+### Way A — entirely in your browser (recommended for your first figure)
+
+1. **Create a free [GitHub](https://github.com) account**, then open
+   [the repository](https://github.com/Nuruddindev/figeomatrica) and press
+   the **Fork** button (top right). *Fork* = your own copy of the project,
+   under your account. Nothing you do can break the original.
+2. **Claim a figure** — open an issue with the
+   ["Geometrize a figure"](../../issues/new?template=geometrize-figure.md)
+   template so nobody double-claims, or just pick any file under
+   `data/figures/` whose contract blocks are missing (e.g. `epizeuxis.json`).
+3. **Edit the file in the browser**: navigate to
+   `data/figures/<name>.json`, click the **pencil icon** (top right of the
+   file view), and fill in the blocks described below. GitHub shows you a
+   preview; JSON must stay valid (watch commas and quotes).
+4. **Press "Commit changes"** and choose *"create a new branch … propose
+   changes"*. Committing = saving a snapshot. It lives only in YOUR fork.
+5. **GitHub now offers "Propose changes" / "Open pull request"** — click it,
+   describe briefly what you did, submit. This request (*pull request*, PR)
+   says: "here is my work, please consider it."
+6. **A robot checks your work within ~2 minutes.** Green checkmark =
+   your evidence held up; you wait for human review. Red X = open the
+   failed check, read the exact reason, edit your file again and commit to
+   the same branch — the check reruns automatically. Nobody scolds you;
+   the machine simply refuses unevidenced claims, always with an
+   explanation.
+7. **A maintainer reviews** (= our Judgment Desk). Merge = ratification:
+   your name enters the entry's `attribution`, permanently.
+
+### Way B — on your own computer
+
+For those comfortable with Git: fork → `git clone` your fork → branch →
+edit → commit → push to your fork → open the PR. Nothing is ever sent
+anywhere automatically; work stays local until you push, and even then it
+only reaches your own fork — never this repository without a PR.
+
+Local verification before pushing:
+
+```bash
+cargo test --workspace
+cargo run -q -p figeometrica-rhetorica --bin sidang -- --ci
+cargo run -q -p figeometrica-rhetorica --bin validate
+```
+
+If all three are green, CI will be green too.
+
+---
+
+## What to put in the figure file
 
 ```json
 {
@@ -87,16 +137,6 @@ Never force an unrelated slot into place. Instead:
 
 Old versions are never edited — they are the experiment log. Details in
 [`data/knowledge/README.md`](data/knowledge/README.md).
-
-## Verify locally before pushing
-
-```bash
-cargo test --workspace
-cargo run -q -p figeometrica-rhetorica --bin sidang -- --ci
-cargo run -q -p figeometrica-rhetorica --bin validate
-```
-
-If all three are green, CI will be green too.
 
 ## Review is our Judgment Desk
 

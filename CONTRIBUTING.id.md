@@ -4,17 +4,65 @@
 
 Terima kasih! Panduan ini menjelaskan cara menyumbang **signature
 geometris** — spesifikasi terstruktur yang membuat sebuah figur retoris
-dapat dideteksi dan diaudit mesin. Anda tidak perlu menulis kode; satu
-file JSON + contoh kalimat sudah cukup.
+dapat dideteksi dan diaudit mesin.
 
 Aturan mainnya satu kalimat: **klaim harus berbukti.** Gerbangnya jalan
-di continuous integration (CI) setiap pull request (PR), dan versi lokalnya sama persis.
+di CI setiap PR, dan versi lokalnya sama persis.
 
-## Tesis dalam satu baris
+## Dua jalur berkontribusi
 
-> Setiap figur, bila didefinisikan dengan baik, adalah operasi atas deret:
-> **operasi × jangkar × satuan × pengulangan** — kini dieksekusi sebagai
-> `FigureSignature` yang diperiksa mesin.
+Anda **tidak perlu** bisa pemrograman atau Git. Kebanyakan kontributor
+kami adalah mahasiswa dan akademisi linguistik, retorika, dan filsafat.
+
+### Jalur A — sepenuhnya di peramban (disarankan untuk figur pertama)
+
+1. **Buat akun [GitHub](https://github.com) gratis**, lalu buka
+   [repositorinya](https://github.com/Nuruddindev/figeomatrica) dan tekan
+   tombol **Fork** (kanan atas). *Fork* = salinan proyek milik Anda
+   sendiri, di akun Anda. Apa pun yang Anda lakukan tak akan merusak
+   aslinya.
+2. **Klaim satu figur** — buka issue dengan templat
+   ["Geometrize a figure"](../../issues/new?template=geometrize-figure.md)
+   supaya tidak ada klaim ganda, atau langsung pilih file mana pun di
+   `data/figures/` yang blok kontraknya belum ada (mis. `epizeuxis.json`).
+3. **Edit filenya di peramban**: menuju `data/figures/<nama>.json`,
+   klik **ikon pensil** (kanan atas tampilan file), dan isi blok-blok
+   yang dijelaskan di bawah. GitHub menampilkan pratinjau; JSON harus
+   tetap sah (perhatikan koma dan tanda kutip).
+4. **Tekan "Commit changes"** dan pilih *"create a new branch … propose
+   changes"*. Commit = menyimpan potret pekerjaan. Potret itu hanya ada
+   di fork MILIK ANDA.
+5. **GitHub kini menawarkan "Propose changes" / "Open pull request"** —
+   klik, jelaskan singkat apa yang Anda kerjakan, kirim. Permintaan ini
+   (*pull request*, PR) artinya: "ini kerjaku, mohon dipertimbangkan."
+6. **Robot memeriksa pekerjaan Anda dalam ±2 menit.** Ceklis hijau =
+   bukti Anda bertahan; tunggu review manusia. X merah = buka pemeriksaan
+   yang gagal, baca alasannya yang persis, sunting ulang filemu dan
+   commit ke branch yang sama — pemeriksaan otomatis berjalan lagi. Tidak
+   ada yang menghakimi; mesin sekadar menolak klaim tanpa bukti, selalu
+   dengan penjelasan.
+7. **Maintainer mereview** (= Meja Hakim kami). Merge = pengesahan: nama
+   Anda masuk field `attribution` entri itu, permanen.
+
+### Jalur B — di komputer sendiri
+
+Bagi yang nyaman dengan Git: fork → `git clone` fork Anda → branch →
+edit → commit → push ke fork Anda → buka PR. Tidak ada yang terkirim
+ke mana pun secara otomatis; pekerjaan tetap lokal sampai Anda push,
+dan sekalipun sudah push, ia hanya mencapai fork Anda sendiri — tidak
+pernah ke repositori ini tanpa PR.
+
+Verifikasi lokal sebelum push:
+
+```bash
+cargo test --workspace
+cargo run -q -p figeometrica-rhetorica --bin sidang -- --ci
+cargo run -q -p figeometrica-rhetorica --bin validate
+```
+
+Kalau ketiganya hijau, CI juga akan hijau.
+
+---
 
 ## Anatomi satu file figur
 
@@ -110,16 +158,6 @@ Jangan paksa slot lain menggantikan slot yang dibutuhkan:
 
 Versi lama tidak pernah diedit — mereka adalah rekam jejak eksperimen.
 Detail: [`data/knowledge/README.md`](data/knowledge/README.md).
-
-## Verifikasi lokal sebelum push
-
-```bash
-cargo test --workspace
-cargo run -q -p figeometrica-rhetorica --bin sidang -- --ci
-cargo run -q -p figeometrica-rhetorica --bin validate
-```
-
-Kalau ketiganya hijau, CI juga akan hijau.
 
 ## Review = Meja Hakim
 
