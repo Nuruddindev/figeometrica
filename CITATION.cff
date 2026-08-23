@@ -17,8 +17,6 @@ authors:
     family-names: Asyhadie
     alias: Nuruddindev
     website: https://github.com/Nuruddindev
-  - alias: kushala
-    website: https://github.com/kushala
 keywords:
   - rhetoric
   - computational-humanities
@@ -28,5 +26,12 @@ keywords:
   - rust
 license: MIT
 repository-code: https://github.com/Nuruddindev/figeometrica
-version: v0.9.0
-date-released: "2026-08-23"
+identifiers:
+  - description: Zenodo concept DOI (all versions)
+    type: doi
+    value: 10.5281/zenodo.22071959
+  - description: Zenodo version DOI for v0.1.0
+    type: doi
+    value: 10.5281/zenodo.22071960
+version: v0.1.0
+date-released: "2026-08-24"

@@ -1,5 +1,7 @@
 # Figeometrica
 
+[![DOI](https://zenodo.org/badge/1341563801.svg)](https://doi.org/10.5281/zenodo.22071959)
+
 *[Versi Indonesia](README.id.md) · English version*
 
 **Figures are geometric.** Every rhetorical figure — if well defined — is an

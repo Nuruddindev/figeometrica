@@ -1,5 +1,7 @@
 # Figeometrica
 
+[![DOI](https://zenodo.org/badge/1341563801.svg)](https://doi.org/10.5281/zenodo.22071959)
+
 *[English version](README.md) · Versi Indonesia*
 
 **Figur itu geometris.** Setiap figur retorika — bila didefinisikan dengan
