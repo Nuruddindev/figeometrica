@@ -159,4 +159,4 @@ twenty-four centuries can finally be verified at scale.
 
 ---
 
-*447 figures await. Pick one, compile it, let the machine check your work.*
+*The remaining figures await. Pick one, compile it, let the machine check your work.*

@@ -1,6 +1,8 @@
 # Figeometrica
 
 [![DOI](https://zenodo.org/badge/1341563801.svg)](https://doi.org/10.5281/zenodo.22071959)
+[![figures geometrized](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Nuruddindev/figeometrica/main/badges/geometrized.json)](CONTRIBUTING.md)
+[![witness-tested](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Nuruddindev/figeometrica/main/badges/witness.json)](MANIFESTO.md)
 
 *[English version](README.md) · Versi Indonesia*
 
@@ -94,7 +96,8 @@ parenthesis); basis teori retorika digeometrisasi bertahap.
 
 ## Ikut berkontribusi
 
-447 dari 456 figur menunggu kompilasi geometris dan verifikasi — dan mesin
+Sebagian besar dari 456 figur warisan masih menunggu kompilasi geometris dan
+verifikasi — dan mesin
 memeriksa pekerjaan Anda: setiap kontribusi membawa kalimat contoh yang
 dijalankan CI lewat matcher deterministik. **Tanpa coding, tanpa Git** —
 figur pertama bisa dikerjakan sepenuhnya di peramban (lihat

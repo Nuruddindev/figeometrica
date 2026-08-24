@@ -17,3 +17,23 @@ jobs:
         run: cargo run -q -p figeometrica-rhetorica --bin validate
       - name: Sidang kontrak (CONTRACT.md §12 — witness + ladder consistency)
         run: cargo run -q -p figeometrica-rhetorica --bin sidang -- --ci
+
+  badges:
+    if: github.ref == 'refs/heads/main'
+    needs: test-and-validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refresh badge counts
+        run: python3 scripts/make_badges.py
+      - name: Commit refreshed badges
+        run: |
+          git config user.name "figeobot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add badges/
+          if ! git diff --cached --quiet; then
+            git commit -m "[skip ci] badges: refresh live counters"
+            git push
+          fi

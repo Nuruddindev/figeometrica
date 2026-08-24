@@ -1,6 +1,8 @@
 # Figeometrica
 
 [![DOI](https://zenodo.org/badge/1341563801.svg)](https://doi.org/10.5281/zenodo.22071959)
+[![figures geometrized](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Nuruddindev/figeometrica/main/badges/geometrized.json)](CONTRIBUTING.md)
+[![witness-tested](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Nuruddindev/figeometrica/main/badges/witness.json)](MANIFESTO.md)
 
 *[Versi Indonesia](README.id.md) · English version*
 
@@ -94,7 +96,8 @@ parenthesis); the rhetoric theory base is being geometrized incrementally.
 
 ## Participate
 
-447 of 456 figures await geometric compilation and verification — and the machine
+Most of the 456 inherited figures still await geometric compilation and
+verification — and the machine
 checks your work: every contribution ships with example sentences that CI
 runs through the deterministic matcher. **No coding, no Git required** —
 your first figure can be done entirely in the browser (see
