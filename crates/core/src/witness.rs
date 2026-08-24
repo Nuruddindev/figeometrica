@@ -117,6 +117,7 @@ fn anchor_sig_ke_str(anchor_id: &str) -> Option<&'static str> {
         "initial-segment" => Some("initial"),
         "final-segment" => Some("final"),
         "medial-segment" => Some("medial"),
+        "cross-unit" => Some("cross_unit"),
         _ => None,
     }
 }
@@ -150,17 +151,50 @@ pub fn satisfies(
             ("adjectio", posisi_ke_anchor(idx, x, y))
         }
         (x, y) if x == y && x >= 2 => {
-            // Panjang sama: satu segmen diganti (immutatio) atau dua
-            // segmen bertetangga bertukar urutan (ordering).
+            // Panjang sama: cabang berdasar OPERASI YANG DIKLAIM, karena
+            // dua keluarga transmutasi berbagi bentuk (b-a→a-b bisa
+            // terbaca tukar maupun urut-alfabet untuk 2 elemen).
             let beda: Vec<usize> = (0..x).filter(|&i| b[i] != a[i]).collect();
-            match beda.as_slice() {
-                [satu] => ("immutatio", posisi_ke_anchor(*satu, x, y)),
-                [i, j] if *j == *i + 1 && b[*i] == a[*j] && b[*j] == a[*i] => {
-                    ("ordering", posisi_pertukaran(*i, *j, x))
+            match sig.operation {
+                Operation::Substitution => {
+                    if beda.len() == 1 {
+                        ("immutatio", posisi_ke_anchor(beda[0], x, y))
+                    } else {
+                        return Err(Violation::Unsupported(format!(
+                            "immutatio menuntut tepat satu segmen berubah: {b:?} → {a:?}"
+                        )));
+                    }
+                }
+                Operation::Permutation => {
+                    match beda.as_slice() {
+                        [i, j] if *j == *i + 1 && b[*i] == a[*j] && b[*j] == a[*i] => {
+                            ("transmutatio", posisi_pertukaran(*i, *j, x))
+                        }
+                        _ => {
+                            return Err(Violation::Unsupported(format!(
+                                "transmutatio menuntut tukar-tetangga tunggal: {b:?} → {a:?}"
+                            )))
+                        }
+                    }
+                }
+                Operation::Ordering => {
+                    // Urutan ke indeks referensi (default: alfabet).
+                    // Elemen sama, susunan after naik ketat, before tidak
+                    // boleh sudah terurut (kalau begitu bukan apa-apanya).
+                    let mut srt = a.to_vec();
+                    srt.sort_unstable();
+                    if beda.len() >= 2 && a == srt.as_slice() && b != a {
+                        ("ordering", "cross_unit")
+                    } else {
+                        return Err(Violation::Unsupported(format!(
+                            "ordering menuntut susunan referensi naik dari teks acak: {b:?} → {a:?}"
+                        )));
+                    }
                 }
                 _ => {
                     return Err(Violation::Unsupported(format!(
-                        "perubahan panjang sama {b:?} → {a:?} bukan ganti-satu atau tukar-tetangga"
+                        "operasi {} tak dikenal pada panjang sama",
+                        sig.operation.as_str()
                     )))
                 }
             }
@@ -244,7 +278,18 @@ pub fn infer_transform(before: &str, after: &str) -> Result<InferredTransform, V
             ("adjectio", i.min(y - 1))
         }
         (x, y) if x == y && x >= 2 => {
-            // Sama dengan satisfies(): ganti-satu atau tukar-tetangga.
+            // Rekonstruksi buta (CONTRACT §8.4). Aturan pemilah saat
+            // bentuk ambigu (2 elemen terurut = sekalian tukar):
+            // susunan naik menang → ordering; selain itu tukar-tetangga
+            // tunggal → transmutatio.
+            let mut srt = a.to_vec();
+            srt.sort_unstable();
+            if a == srt.as_slice() && b != a {
+                return Ok(InferredTransform {
+                    operation: "ordering".into(),
+                    anchor: "cross_unit".into(),
+                });
+            }
             let beda: Vec<usize> = (0..x).filter(|&i| b[i] != a[i]).collect();
             match beda.as_slice() {
                 [satu] => {
@@ -255,13 +300,13 @@ pub fn infer_transform(before: &str, after: &str) -> Result<InferredTransform, V
                 }
                 [i, j] if *j == *i + 1 && b[*i] == a[*j] && b[*j] == a[*i] => {
                     return Ok(InferredTransform {
-                        operation: "ordering".into(),
+                        operation: "transmutatio".into(),
                         anchor: posisi_pertukaran(*i, *j, x).into(),
                     });
                 }
                 _ => {
                     return Err(Violation::Unsupported(
-                        "hanya tambah/hapus/ganti-satu/tukar-tetangga yang bisa direkonstruksi"
+                        "hanya tambah/hapus/ganti-satu/tukar-tetangga/urut yang bisa direkonstruksi"
                             .into(),
                     ))
                 }
@@ -578,8 +623,49 @@ pub fn run_protocol_pola(sig: &FigureSignature) -> Result<ProtocolReport, String
 pub fn run_protocol_auto(sig: &FigureSignature) -> Result<ProtocolReport, String> {
     match sig.operation {
         crate::Operation::Repetition => run_protocol_pola(sig),
+        crate::Operation::Ordering => run_protocol_urutan(sig),
         _ => run_protocol(sig),
     }
+}
+
+/// Ordering (CONTRACT §8, figures of order): elemen i terjangkar ke
+/// posisi i dari deret referensi — default alfabet (abecedarian).
+/// Baterainya sendiri: positif = acak→terurut naik; negatif-locus =
+/// dibiarkan acak; negatif-anchor = kosong. Semuanya deterministik.
+fn run_protocol_urutan(sig: &FigureSignature) -> Result<ProtocolReport, String> {
+    if sig.domain_id != "textual" {
+        return Err(format!(
+            "domain '{}' menunggu jalur konstruktor LLM (CONTRACT §8)",
+            sig.domain_id
+        ));
+    }
+    const ACAK: &str = "c-a-b";
+    const URUT: &str = "a-b-c";
+    let battery = vec![
+        TextWitness { kind: WitnessKind::Positive, before: ACAK.into(), after: URUT.into() },
+        TextWitness { kind: WitnessKind::NegativeLocus, before: ACAK.into(), after: ACAK.into() },
+        TextWitness { kind: WitnessKind::NegativeAnchor, before: ACAK.into(), after: String::new() },
+    ];
+
+    let mut checks = Vec::new();
+    let mut passed = true;
+    for w in &battery {
+        let ok = satisfies(sig, &w.before, &w.after).is_ok();
+        let expected = match w.kind {
+            WitnessKind::Positive => Expectation::Pass,
+            _ => Expectation::Fail,
+        };
+        if ok != (expected == Expectation::Pass) {
+            passed = false;
+        }
+        checks.push(ProtocolCheck { kind: w.kind, expected, observed_ok: ok });
+    }
+
+    let inverse = inverse_test(sig, ACAK, URUT);
+    if inverse != InverseVerdict::Match {
+        passed = false;
+    }
+    Ok(ProtocolReport { passed, inverse, checks })
 }
 
 fn terapkan(op: Operation, anchor_id: &str, karier: &str, payload: &str) -> Option<String> {
@@ -616,7 +702,9 @@ fn terapkan(op: Operation, anchor_id: &str, karier: &str, payload: &str) -> Opti
             }
         }
         // Tier-2 generators (CONTRACT §8): ganti satu segmen / tukar
-        // dua segmen bertetangga. Payload tak dipakai oleh ordering.
+        // dua segmen bertetangga. Tukar-tetangga adalah transmutatio
+        // (metathesis) — ordering BUKAN di sini: ia keluarga transmutasi
+        // dengan fungsi urut ke indeks referensi (lihat run_protocol_urutan).
         (Operation::Substitution, "initial-segment") => {
             let mut out = s.clone();
             out[0] = payload;
@@ -637,7 +725,7 @@ fn terapkan(op: Operation, anchor_id: &str, karier: &str, payload: &str) -> Opti
                 Some(out.join("-"))
             }
         }
-        (Operation::Ordering, "initial-segment") => {
+        (Operation::Permutation, "initial-segment") => {
             if s.len() < 2 {
                 None
             } else {
@@ -646,7 +734,7 @@ fn terapkan(op: Operation, anchor_id: &str, karier: &str, payload: &str) -> Opti
                 Some(out.join("-"))
             }
         }
-        (Operation::Ordering, "final-segment") => {
+        (Operation::Permutation, "final-segment") => {
             if s.len() < 2 {
                 None
             } else {
@@ -656,7 +744,7 @@ fn terapkan(op: Operation, anchor_id: &str, karier: &str, payload: &str) -> Opti
                 Some(out.join("-"))
             }
         }
-        (Operation::Ordering, "medial-segment") => {
+        (Operation::Permutation, "medial-segment") => {
             if s.len() < 3 {
                 None
             } else {
@@ -681,7 +769,7 @@ pub fn generate_deterministic(sig: &FigureSignature) -> GenerationOutcome {
             ),
         };
     }
-    if ![Operation::Deletion, Operation::Addition, Operation::Substitution, Operation::Ordering]
+    if ![Operation::Deletion, Operation::Addition, Operation::Substitution, Operation::Permutation]
         .contains(&sig.operation)
     {
         return GenerationOutcome::DeterministicUnsupported {
@@ -889,11 +977,21 @@ mod tests {
         .unwrap()
     }
 
-    fn ordering_sig() -> FigureSignature {
+    fn transmutatio_sig() -> FigureSignature {
         serde_json::from_value(serde_json::json!({
             "domain_id": "textual",
             "unit_id": "word",
             "anchor_id": "final-segment",
+            "operation": "transmutatio"
+        }))
+        .unwrap()
+    }
+
+    fn ordering_sig() -> FigureSignature {
+        serde_json::from_value(serde_json::json!({
+            "domain_id": "textual",
+            "unit_id": "word",
+            "anchor_id": "cross-unit",
             "operation": "ordering"
         }))
         .unwrap()
@@ -907,10 +1005,10 @@ mod tests {
     }
 
     #[test]
-    fn ordering_lulus_sidang_penuh() {
-        let sig = ordering_sig();
+    fn transmutatio_tukar_tetangga_lulus_sidang() {
+        let sig = transmutatio_sig();
         let GenerationOutcome::Generated(b) = generate_deterministic(&sig) else {
-            panic!("ordering harus tergenerasi");
+            panic!("transmutatio harus tergenerasi");
         };
         // Positif: a-b-c → a-c-b (tukar dua segmen final).
         let p = &b[0];
@@ -924,6 +1022,28 @@ mod tests {
     }
 
     #[test]
+    fn ordering_abecedarian_lulus_sidang_penuh() {
+        // Figures of order: elemen terjangkar ke posisi alfabet.
+        let laporan = run_protocol_auto(&ordering_sig()).unwrap();
+        assert!(laporan.passed, "cek: {:?}", laporan.checks);
+        assert_eq!(laporan.inverse, InverseVerdict::Match);
+        assert!(satisfies(&ordering_sig(), "c-a-b", "a-b-c").is_ok());
+        // Sudah terurut = bukan apa-apanya; acak lain juga bukan figur.
+        assert!(satisfies(&ordering_sig(), "a-b-c", "a-b-c").is_err());
+        assert!(satisfies(&ordering_sig(), "c-a-b", "c-b-a").is_err());
+    }
+
+    #[test]
+    fn rekonstruksi_buta_memilah_urut_vs_tukar() {
+        let t = infer_transform("c-a-b", "a-b-c").unwrap();
+        assert_eq!((t.operation.as_str(), t.anchor.as_str()), ("ordering", "cross_unit"));
+        let t = infer_transform("b-a", "a-b").unwrap(); // ambigu → urut menang
+        assert_eq!(t.operation.as_str(), "ordering");
+        let t = infer_transform("a-x-c", "a-y-c").unwrap();
+        assert_eq!(t.operation.as_str(), "immutatio");
+    }
+
+    #[test]
     fn teks_tak_berubah_bukan_immutatio() {
         // Negative-payload probe: tanpa penggantian, bukan figur.
         assert!(satisfies(&immutatio_sig(), "a-b-c", "a-b-c").is_err());
@@ -931,8 +1051,8 @@ mod tests {
 
     #[test]
     fn tukar_non_tetangga_di_luar_jangkauan() {
-        // Permutasi jauh (a-b-c → c-b-a) bukan ordering minimal.
-        let sig = ordering_sig();
+        // Permutasi jauh (a-b-c → c-b-a) bukan transmutatio minimal.
+        let sig = transmutatio_sig();
         assert!(satisfies(&sig, "a-b-c", "c-b-a").is_err());
     }
 }
