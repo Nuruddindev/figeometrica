@@ -155,5 +155,7 @@ PR thread — that thread *is* our ledger.
   (inbound = outbound).
 - Your name goes into the entry's `attribution` field + CONTRIBUTORS.md.
 - Contributors with **≥ 10 accepted entries** or serving as validators
-  join the dataset paper's public co-author list. Final criteria are
-  announced before the paper is written and are not retroactive.
+  join the dataset paper's public co-author list. The paper is published
+  as an open-access, DOI'd preprint on Zenodo (submission to a
+  peer-reviewed venue is planned). Final criteria are announced before
+  the paper is written and are not retroactive.

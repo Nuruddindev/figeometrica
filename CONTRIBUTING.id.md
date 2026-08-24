@@ -171,5 +171,7 @@ utas PR — utas itulah buku besar kami.
 - Kontribusi dilisensikan **MIT** sejak dibuka PR-nya (inbound = outbound).
 - Nama Anda tersimpan di field `attribution` entri + CONTRIBUTORS.md.
 - Kontributor dengan **≥ 10 entri diterima** atau berperan sebagai
-  validator masuk daftar co-author publikasi dataset. Kriteria final
-  diumumkan sebelum paper ditulis dan tidak berlaku surut.
+  validator masuk daftar co-author publikasi dataset. Paper terbit
+  sebagai preprint akses-terbuka ber-DOI di Zenodo (pengajuan ke venue
+  peer-review direncanakan). Kriteria final diumumkan sebelum paper
+  ditulis dan tidak berlaku surut.
