@@ -97,6 +97,21 @@ fn posisi_ke_anchor(idx: usize, len_before: usize, len_after: usize) -> &'static
     }
 }
 
+/// Posisi anchor untuk pertukaran pasangan bertetangga: dinilai dari
+/// tepi pasangan, bukan indeks divergensi pertama (a-b-c → a-c-b
+/// menyentuh indeks 1-2 tetapi anchor-nya "final").
+fn posisi_pertukaran(i: usize, j: usize, len: usize) -> &'static str {
+    debug_assert_eq!(j, i + 1);
+    let _ = len;
+    if i == 0 {
+        "initial"
+    } else if j + 1 == len {
+        "final"
+    } else {
+        "medial"
+    }
+}
+
 fn anchor_sig_ke_str(anchor_id: &str) -> Option<&'static str> {
     match anchor_id {
         "initial-segment" => Some("initial"),
@@ -116,25 +131,43 @@ pub fn satisfies(
     let b = segmen(before);
     let a = segmen(after);
 
-    let (operation_observed, idx): (&str, usize) = match (b.len(), a.len()) {
+    let (operation_observed, anchor_observed): (&str, &str) = match (b.len(), a.len()) {
         (x, y) if y + 1 == x => {
             // cari segmen yang hilang
             let mut i = 0;
             while i < a.len() && b[i] == a[i] {
                 i += 1;
             }
-            ("detractio", i.min(x - 1))
+            let idx = i.min(x - 1);
+            ("detractio", posisi_ke_anchor(idx, x, y))
         }
         (x, y) if y == x + 1 => {
             let mut i = 0;
             while i < b.len() && b[i] == a[i] {
                 i += 1;
             }
-            ("adjectio", i.min(y - 1))
+            let idx = i.min(y - 1);
+            ("adjectio", posisi_ke_anchor(idx, x, y))
+        }
+        (x, y) if x == y && x >= 2 => {
+            // Panjang sama: satu segmen diganti (immutatio) atau dua
+            // segmen bertetangga bertukar urutan (ordering).
+            let beda: Vec<usize> = (0..x).filter(|&i| b[i] != a[i]).collect();
+            match beda.as_slice() {
+                [satu] => ("immutatio", posisi_ke_anchor(*satu, x, y)),
+                [i, j] if *j == *i + 1 && b[*i] == a[*j] && b[*j] == a[*i] => {
+                    ("ordering", posisi_pertukaran(*i, *j, x))
+                }
+                _ => {
+                    return Err(Violation::Unsupported(format!(
+                        "perubahan panjang sama {b:?} → {a:?} bukan ganti-satu atau tukar-tetangga"
+                    )))
+                }
+            }
         }
         _ => {
             return Err(Violation::Unsupported(format!(
-                "perubahan panjang {b:?} → {a:?} bukan tambah/hapus satu segmen"
+                "perubahan panjang {b:?} → {a:?} bukan tambah/hapus/ganti-satu atau tukar-tetangga"
             )))
         }
     };
@@ -147,7 +180,6 @@ pub fn satisfies(
         });
     }
 
-    let anchor_observed = posisi_ke_anchor(idx, b.len(), a.len());
     match anchor_sig_ke_str(&sig.anchor_id) {
         Some(declared) if declared != anchor_observed => {
             return Err(Violation::AnchorMismatch {
@@ -210,6 +242,30 @@ pub fn infer_transform(before: &str, after: &str) -> Result<InferredTransform, V
                 i += 1;
             }
             ("adjectio", i.min(y - 1))
+        }
+        (x, y) if x == y && x >= 2 => {
+            // Sama dengan satisfies(): ganti-satu atau tukar-tetangga.
+            let beda: Vec<usize> = (0..x).filter(|&i| b[i] != a[i]).collect();
+            match beda.as_slice() {
+                [satu] => {
+                    return Ok(InferredTransform {
+                        operation: "immutatio".into(),
+                        anchor: posisi_ke_anchor(*satu, x, y).into(),
+                    });
+                }
+                [i, j] if *j == *i + 1 && b[*i] == a[*j] && b[*j] == a[*i] => {
+                    return Ok(InferredTransform {
+                        operation: "ordering".into(),
+                        anchor: posisi_pertukaran(*i, *j, x).into(),
+                    });
+                }
+                _ => {
+                    return Err(Violation::Unsupported(
+                        "hanya tambah/hapus/ganti-satu/tukar-tetangga yang bisa direkonstruksi"
+                            .into(),
+                    ))
+                }
+            }
         }
         _ => {
             return Err(Violation::Unsupported(
@@ -559,6 +615,56 @@ fn terapkan(op: Operation, anchor_id: &str, karier: &str, payload: &str) -> Opti
                 Some(out.join("-"))
             }
         }
+        // Tier-2 generators (CONTRACT §8): ganti satu segmen / tukar
+        // dua segmen bertetangga. Payload tak dipakai oleh ordering.
+        (Operation::Substitution, "initial-segment") => {
+            let mut out = s.clone();
+            out[0] = payload;
+            Some(out.join("-"))
+        }
+        (Operation::Substitution, "final-segment") => {
+            let mut out = s.clone();
+            let n = out.len();
+            out[n - 1] = payload;
+            Some(out.join("-"))
+        }
+        (Operation::Substitution, "medial-segment") => {
+            if s.len() < 3 {
+                None
+            } else {
+                let mut out = s.clone();
+                out[1] = payload;
+                Some(out.join("-"))
+            }
+        }
+        (Operation::Ordering, "initial-segment") => {
+            if s.len() < 2 {
+                None
+            } else {
+                let mut out = s.clone();
+                out.swap(0, 1);
+                Some(out.join("-"))
+            }
+        }
+        (Operation::Ordering, "final-segment") => {
+            if s.len() < 2 {
+                None
+            } else {
+                let mut out = s.clone();
+                let n = out.len();
+                out.swap(n - 2, n - 1);
+                Some(out.join("-"))
+            }
+        }
+        (Operation::Ordering, "medial-segment") => {
+            if s.len() < 3 {
+                None
+            } else {
+                let mut out = s.clone();
+                out.swap(1, 2);
+                Some(out.join("-"))
+            }
+        }
         _ => None,
     }
 }
@@ -575,7 +681,9 @@ pub fn generate_deterministic(sig: &FigureSignature) -> GenerationOutcome {
             ),
         };
     }
-    if ![Operation::Deletion, Operation::Addition].contains(&sig.operation) {
+    if ![Operation::Deletion, Operation::Addition, Operation::Substitution, Operation::Ordering]
+        .contains(&sig.operation)
+    {
         return GenerationOutcome::DeterministicUnsupported {
             reason: format!(
                 "operasi '{}' belum punya generator deterministik",
@@ -768,5 +876,63 @@ mod tests {
         assert_eq!((p.before.as_str(), p.after.as_str()), ("a-b-c", "x-a-b-c"));
         assert!(satisfies(&sig, &p.before, &p.after).is_ok());
         assert_eq!(inverse_test(&sig, &p.before, &p.after), InverseVerdict::Match);
+    }
+
+    fn immutatio_sig() -> FigureSignature {
+        serde_json::from_value(serde_json::json!({
+            "domain_id": "textual",
+            "unit_id": "word",
+            "anchor_id": "initial-segment",
+            "operation": "immutatio",
+            "payload_id": "x"
+        }))
+        .unwrap()
+    }
+
+    fn ordering_sig() -> FigureSignature {
+        serde_json::from_value(serde_json::json!({
+            "domain_id": "textual",
+            "unit_id": "word",
+            "anchor_id": "final-segment",
+            "operation": "ordering"
+        }))
+        .unwrap()
+    }
+
+    #[test]
+    fn immutatio_lulus_sidang_penuh() {
+        let laporan = run_protocol_auto(&immutatio_sig()).unwrap();
+        assert!(laporan.passed, "cek: {:?}", laporan.checks);
+        assert_eq!(laporan.inverse, InverseVerdict::Match);
+    }
+
+    #[test]
+    fn ordering_lulus_sidang_penuh() {
+        let sig = ordering_sig();
+        let GenerationOutcome::Generated(b) = generate_deterministic(&sig) else {
+            panic!("ordering harus tergenerasi");
+        };
+        // Positif: a-b-c → a-c-b (tukar dua segmen final).
+        let p = &b[0];
+        assert_eq!(
+            (p.before.as_str(), p.after.as_str()),
+            ("a-b-c", "a-c-b")
+        );
+        let laporan = run_protocol_auto(&sig).unwrap();
+        assert!(laporan.passed, "cek: {:?}", laporan.checks);
+        assert_eq!(laporan.inverse, InverseVerdict::Match);
+    }
+
+    #[test]
+    fn teks_tak_berubah_bukan_immutatio() {
+        // Negative-payload probe: tanpa penggantian, bukan figur.
+        assert!(satisfies(&immutatio_sig(), "a-b-c", "a-b-c").is_err());
+    }
+
+    #[test]
+    fn tukar_non_tetangga_di_luar_jangkauan() {
+        // Permutasi jauh (a-b-c → c-b-a) bukan ordering minimal.
+        let sig = ordering_sig();
+        assert!(satisfies(&sig, "a-b-c", "c-b-a").is_err());
     }
 }
