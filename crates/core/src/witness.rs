@@ -117,7 +117,7 @@ fn anchor_sig_ke_str(anchor_id: &str) -> Option<&'static str> {
         "initial-segment" => Some("initial"),
         "final-segment" => Some("final"),
         "medial-segment" => Some("medial"),
-        "cross-unit" => Some("cross_unit"),
+        "cross-unit" | "cross-boundary" => Some("cross_unit"),
         _ => None,
     }
 }
